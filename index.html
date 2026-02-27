@@ -2,109 +2,37 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Weer Wemmel 7 dagen</title>
+<title>Weer Wemmel Widget</title>
 <style>
 html, body {
   margin:0;
   padding:0;
   width:100%;
   height:100%;
-  font-family: Arial, sans-serif;
   display:flex;
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  transition: background 1s ease;
-  color:#fff;
+  background:#004080;
 }
 
-#forecast {
-  display:flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 480px;
-}
-
-.day {
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 18px;
-}
-
-.day img {
-  width: 40px;
-  height: 40px;
-  margin: 5px 0;
-}
-
-.day .temp {
-  font-size: 20px;
-  font-weight: bold;
+/* Zorg dat de widget exact past op 480x240 LED */
+iframe {
+  width:480px;
+  height:240px;
+  border:0;
 }
 </style>
 </head>
 <body>
 
-<div id="forecast">
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-  <div class="day"><div class="label">--</div><img src=""><div class="temp">--°</div></div>
-</div>
-
-<script>
-const apiKey = "5fa05e3bd780962be4ed4c5af14e27a7";
-const city = "Wemmel,BE";
-
-function getIconUrl(icon){
-  return `https://openweathermap.org/img/wn/${icon}.png`;
-}
-
-function setBackground(weather){
-  weather = weather.toLowerCase();
-  switch(weather){
-    case "clear": document.body.style.background="#66ccff"; break;
-    case "clouds": document.body.style.background="#708090"; break;
-    case "rain":
-    case "drizzle": document.body.style.background="#4d4d4d"; break;
-    case "thunderstorm": document.body.style.background="#333333"; break;
-    case "snow": document.body.style.background="#ffffff"; document.body.style.color="#000"; break;
-    case "mist":
-    case "fog": document.body.style.background="#a9a9a9"; document.body.style.color="#000"; break;
-    default: document.body.style.background="#004080"; document.body.style.color="#fff"; break;
-  }
-}
-
-async function fetchForecast(){
-  try{
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&cnt=7&units=metric&lang=nl&appid=${apiKey}`);
-    const data = await res.json();
-    const days = document.querySelectorAll('.day');
-
-    // Vandaag weer voor achtergrond
-    setBackground(data.list[0].weather[0].main);
-
-    for(let i=0;i<7;i++){
-      const d = new Date(data.list[i].dt*1000);
-      days[i].querySelector('.label').textContent = d.toLocaleDateString('nl-BE',{ weekday:'short' });
-      days[i].querySelector('img').src = getIconUrl(data.list[i].weather[0].icon);
-      days[i].querySelector('.temp').textContent = Math.round(data.list[i].temp.day)+'°';
-    }
-  } catch(err){
-    console.log("Fout bij laden forecast:",err);
-  }
-}
-
-// Eerste keer laden
-fetchForecast();
-
-// Update elke 6 uur
-setInterval(fetchForecast,21600000);
-</script>
+<!-- OpenWeather Widget Embed voor Wemmel, België -->
+<iframe 
+  src="https://forecast7.com/en/50d8814d37/wemmel/?unit=metric&lang=nl" 
+  frameborder="0" 
+  scrolling="no" 
+  allowtransparency="true">
+</iframe>
 
 </body>
 </html>
