@@ -15,14 +15,14 @@ html, body {
   align-items:center;
   overflow:hidden;
   transition: background 1s ease;
-  color: #fff;
+  color:#fff;
 }
 
 #forecast {
   display:flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 480px; /* past precies op 480px LED breedte */
+  max-width: 480px;
 }
 
 .day {
@@ -57,45 +57,44 @@ html, body {
 </div>
 
 <script>
-// --- CONFIGUREER JE API KEY ---
-const apiKey = "fbca712f4d58bd3c6489daa47c4bac19"; // OpenWeather API key
-const lat = 50.881; // Wemmel latitude
-const lon = 4.366;  // Wemmel longitude
+const apiKey = "4be71eb03c7f13bee04d7f5db637ba7e";
+const city = "Wemmel,BE";
 
-function getIconUrl(icon) {
+function getIconUrl(icon){
   return `https://openweathermap.org/img/wn/${icon}.png`;
 }
 
-function setBackground(weatherMain) {
-  weatherMain = weatherMain.toLowerCase();
-  switch(weatherMain) {
-    case "clear": document.body.style.background = "#66ccff"; break;
-    case "clouds": document.body.style.background = "#708090"; break;
-    case "rain": case "drizzle": document.body.style.background = "#4d4d4d"; break;
-    case "thunderstorm": document.body.style.background = "#333333"; break;
-    case "snow": document.body.style.background = "#ffffff"; document.body.style.color = "#000"; break;
-    case "mist": case "fog": document.body.style.background = "#a9a9a9"; document.body.style.color = "#000"; break;
-    default: document.body.style.background = "#004080"; document.body.style.color = "#fff"; break;
+function setBackground(weather){
+  weather = weather.toLowerCase();
+  switch(weather){
+    case "clear": document.body.style.background="#66ccff"; break;
+    case "clouds": document.body.style.background="#708090"; break;
+    case "rain":
+    case "drizzle": document.body.style.background="#4d4d4d"; break;
+    case "thunderstorm": document.body.style.background="#333333"; break;
+    case "snow": document.body.style.background="#ffffff"; document.body.style.color="#000"; break;
+    case "mist":
+    case "fog": document.body.style.background="#a9a9a9"; document.body.style.color="#000"; break;
+    default: document.body.style.background="#004080"; document.body.style.color="#fff"; break;
   }
 }
 
-async function fetchForecast() {
-  try {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&lang=nl&appid=${apiKey}`);
+async function fetchForecast(){
+  try{
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&cnt=7&units=metric&lang=nl&appid=${apiKey}`);
     const data = await res.json();
-
-    // Stel achtergrond afhankelijk van het eerste dagweer (vandaag)
-    setBackground(data.daily[0].weather[0].main);
-
     const days = document.querySelectorAll('.day');
+
+    // Vandaag weer voor achtergrond
+    setBackground(data.list[0].weather[0].main);
+
     for(let i=0;i<7;i++){
-      const d = new Date(data.daily[i].dt*1000);
-      const options = { weekday:'short' };
-      days[i].querySelector('.label').textContent = d.toLocaleDateString('nl-BE',options);
-      days[i].querySelector('img').src = getIconUrl(data.daily[i].weather[0].icon);
-      days[i].querySelector('.temp').textContent = Math.round(data.daily[i].temp.day)+'°';
+      const d = new Date(data.list[i].dt*1000);
+      days[i].querySelector('.label').textContent = d.toLocaleDateString('nl-BE',{ weekday:'short' });
+      days[i].querySelector('img').src = getIconUrl(data.list[i].weather[0].icon);
+      days[i].querySelector('.temp').textContent = Math.round(data.list[i].temp.day)+'°';
     }
-  } catch(err) {
+  } catch(err){
     console.log("Fout bij laden forecast:",err);
   }
 }
@@ -103,8 +102,8 @@ async function fetchForecast() {
 // Eerste keer laden
 fetchForecast();
 
-// Auto-refresh elke 6 uur
-setInterval(fetchForecast, 21600000);
+// Update elke 6 uur
+setInterval(fetchForecast,21600000);
 </script>
 
 </body>
