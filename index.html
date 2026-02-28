@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Weerbericht</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weer Wemmel - Fullscreen</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Geen scrollbars */
+      background: #000;  /* zwarte achtergrond */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .weatherwidget-io {
+      width: 100% !important;   /* widget vult de volledige breedte */
+      height: 100% !important;  /* widget vult de volledige hoogte */
+      max-width: none !important;
+      max-height: none !important;
+    }
+  </style>
 </head>
-<body style="margin:0; padding:0; overflow:hidden;">
-  <div id="ww_8a2111282fe33" v='1.3' loc='auto' a='{"t":"horizontal","lang":"nl","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'><a href="https://weatherwidget.org/" id="ww_8a2111282fe33_u" target="_blank">Widget weather HTML</a></div><script async src="https://app3.weatherwidget.org/js/?id=ww_8a2111282fe33"></script>
+<body>
+  <!-- Weather widget voor Wemmel -->
+  <a class="weatherwidget-io" 
+     href="https://forecast7.com/en/50.91n4.31/wemmel/" 
+     data-label_1="WEMMEL" 
+     data-label_2="WEER" 
+     data-theme="original" 
+     data-days="5" 
+     data-baseicon="animated" 
+     data-lang="nl">
+    WEMMEL WEER
+  </a>
+  <script>
+  !function(d,s,id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (!d.getElementById(id)) {
+      js = d.createElement(s);
+      js.id = id;
+      js.src = 'https://weatherwidget.io/js/widget.min.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }
+  }(document, 'script', 'weatherwidget-io-js');
+  </script>
 </body>
 </html>
