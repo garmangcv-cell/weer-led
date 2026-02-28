@@ -10,42 +10,51 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden; /* Geen scrollbars */
-      background: #000;  /* zwarte achtergrond */
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow: hidden;
+      background: #000;
     }
-    .weatherwidget-io {
-      width: 100% !important;   /* widget vult de volledige breedte */
-      height: 100% !important;  /* widget vult de volledige hoogte */
-      max-width: none !important;
-      max-height: none !important;
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
 <body>
-  <!-- Weather widget voor Wemmel -->
-  <a class="weatherwidget-io" 
-     href="https://forecast7.com/en/50.91n4.31/wemmel/" 
-     data-label_1="WEMMEL" 
-     data-label_2="WEER" 
-     data-theme="original" 
-     data-days="5" 
-     data-baseicon="animated" 
-     data-lang="nl">
-    WEMMEL WEER
-  </a>
+  <iframe 
+    src="about:blank"
+    id="weatherFrame"
+    allow="fullscreen"
+    sandbox="allow-scripts allow-same-origin">
+  </iframe>
+
   <script>
-  !function(d,s,id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (!d.getElementById(id)) {
-      js = d.createElement(s);
-      js.id = id;
-      js.src = 'https://weatherwidget.io/js/widget.min.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }
-  }(document, 'script', 'weatherwidget-io-js');
+    var iframe = document.getElementById('weatherFrame');
+    iframe.srcdoc = `
+      <html>
+      <body style="margin:0; padding:0; overflow:hidden;">
+        <a class="weatherwidget-io" 
+           href="https://forecast7.com/en/50.91n4.31/wemmel/" 
+           data-label_1="WEMMEL" 
+           data-label_2="WEER" 
+           data-theme="original" 
+           data-days="5" 
+           data-lang="nl">
+          WEMMEL WEER
+        </a>
+        <script>
+        !function(d,s,id){
+          var js,fjs=d.getElementsByTagName(s)[0];
+          if (!d.getElementById(id)) {
+            js=d.createElement(s);
+            js.id=id;
+            js.src='https://weatherwidget.io/js/widget.min.js';
+            fjs.parentNode.insertBefore(js,fjs);
+          }
+        }(document, 'script', 'weatherwidget-io-js');
+        </script>
+      </body>
+      </html>`;
   </script>
 </body>
 </html>
